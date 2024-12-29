@@ -20,4 +20,10 @@ public class ProductService {
     public List<Product> getProducts() {
         return this.productRepository.findAll();
     }
+
+    public Object getProductById(int id) {
+        return this.productRepository.findById(id).orElse(null);
+    }
+
+
 }
