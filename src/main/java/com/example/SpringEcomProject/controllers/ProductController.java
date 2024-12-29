@@ -6,8 +6,11 @@ import java.util.List;
 // Framework imports
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,7 @@ public class ProductController {
         }
     }
 
+    // The modified response entity is returned which returns the product by id
     @GetMapping("/product/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable int id) {
         try {
@@ -43,6 +47,17 @@ public class ProductController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
             }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // Request Part : It is used to bind the multipart/form-data request to a method parameter in the controller.
+    @PostMapping("/product")
+    public ResponseEntity<Product> addProduct(@RequestPart Product product, @RequestPart  MultipartFile imageFile) {
+        try {
+            Product newProduct = productService.addProduct(product, imageFile);
+            return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
