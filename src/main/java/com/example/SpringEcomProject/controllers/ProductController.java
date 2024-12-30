@@ -3,10 +3,12 @@ package com.example.SpringEcomProject.controllers;
 // Java imports
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 // Framework imports
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,6 +72,33 @@ public class ProductController {
             Product product = (Product) productService.getProductById(id);
             if (product != null) {
                 return new ResponseEntity<>(product.getImageData(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // The modified response entity is returned which updates the product
+    @PutMapping("/product/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestPart Product product, @RequestPart MultipartFile imageFile) {
+        try {
+            Product updatedProduct = productService.updateProduct(id, product, imageFile);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // The modified response entity is returned which deletes the product
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable int id) {
+        try {
+            Product product = (Product) productService.getProductById(id);
+            if (product != null) {
+                productService.deleteProduct(id);
+                return new ResponseEntity<>(product, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
