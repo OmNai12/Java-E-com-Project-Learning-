@@ -63,6 +63,7 @@ public class ProductController {
         }
     }
 
+    // The modified response entity is returned which returns the image of the product
     @GetMapping("/product/{id}/image")
     public ResponseEntity<byte[]> getProductImage(@PathVariable int id) {
         try {
