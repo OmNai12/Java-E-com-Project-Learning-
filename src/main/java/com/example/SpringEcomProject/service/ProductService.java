@@ -71,5 +71,12 @@ public class ProductService {
         }
     }
 
+    public List<Product> searchProduct(String keyword) {
+        try {
+            return this.productRepository.searchProducts(keyword);
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("Unimplemented method 'searchProduct'");
+        }
+    }
 
 }
