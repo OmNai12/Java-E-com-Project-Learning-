@@ -62,4 +62,18 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/product/{id}/image")
+    public ResponseEntity<byte[]> getProductImage(@PathVariable int id) {
+        try {
+            Product product = (Product) productService.getProductById(id);
+            if (product != null) {
+                return new ResponseEntity<>(product.getImageData(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
